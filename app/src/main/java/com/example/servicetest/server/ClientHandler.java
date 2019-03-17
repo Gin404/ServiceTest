@@ -25,6 +25,8 @@ public class ClientHandler implements Runnable{
                     break;
                 }
                 System.out.println(String.format("Request from %s: %s", clientSocket.getRemoteSocketAddress(), request));
+                String response = "You click " + request;
+                clientSocket.getOutputStream().write(response.getBytes());
             }
         } catch (IOException e){
             System.out.println("Caught exception "+e);
