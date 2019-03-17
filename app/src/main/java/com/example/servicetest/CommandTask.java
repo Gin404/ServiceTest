@@ -4,11 +4,13 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class CommandTask extends AsyncTask<Void, String, Integer> {
     private CommandListener listener;
+    Socket client ;
 
     public CommandTask(CommandListener listener){
         this.listener = listener;
@@ -16,21 +18,27 @@ public class CommandTask extends AsyncTask<Void, String, Integer> {
 
     @Override
     protected Integer doInBackground(Void... voids) {
+        InputStream inputStream = null;
         try {
             //host请自行更改
-            Socket client = new Socket("175.159.82.169", 6666);
+            client = new Socket("175.159.82.221", 6666);
 
-            InputStream inputStream = client.getInputStream();
+            inputStream = client.getInputStream();
             byte[] buf = new byte[1024];
             int len = 0;
             while ((len = inputStream.read(buf)) != -1) {
                 String s = new String(buf, 0, len);
                 publishProgress(s);
                 System.out.println(s);
-                //buf = new byte[1024];
             }
+
+
+            inputStream.close();
+            client.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+
         }
         return null;
     }
@@ -53,6 +61,35 @@ public class CommandTask extends AsyncTask<Void, String, Integer> {
     @Override
     protected void onPostExecute(Integer status) {
         // TODO: 02/03/2019
+    }
+
+    public void send(final String s){
+        if (client == null){
+            return;
+        }
+        new Thread(new SendService(s)).start();
+
+
+    }
+
+    private class SendService implements Runnable {
+        private String msg;
+
+        SendService(String msg) {
+            this.msg = msg;
+        }
+
+        @Override
+        public void run() {
+            OutputStream os = null;
+            try {
+                os = client.getOutputStream();
+                os.write(msg.getBytes());
+                //os.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
     }
 
 }

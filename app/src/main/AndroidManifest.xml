@@ -15,11 +15,14 @@
             android:exported="true"></service>
 
         <activity android:name=".EndActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:label="End"/>
         <activity android:name=".GameActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:label="Game"/>
         <activity android:name=".MainActivity"
-                    android:launchMode="singleTask">
+                    android:launchMode="singleTask"
+                    android:label="Start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

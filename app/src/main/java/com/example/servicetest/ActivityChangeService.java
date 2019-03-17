@@ -21,6 +21,10 @@ public class ActivityChangeService extends Service {
         this.colorRemoveCallBack = colorRemoveCallBack;
     }
 
+    public CommandTask getCommandTask() {
+        return commandTask;
+    }
+
     public void setEndCallBack(EndCallBack endCallBack){
         this.endCallBack = endCallBack;
     }
